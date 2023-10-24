@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BuilderPattern/BuilderPattern.iml" filepath="$PROJECT_DIR$/BuilderPattern/BuilderPattern.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Design Patterns.iml" filepath="$PROJECT_DIR$/.idea/Design Patterns.iml" />
       <module fileurl="file://$PROJECT_DIR$/SingletonDesign/SingletonDesign.iml" filepath="$PROJECT_DIR$/SingletonDesign/SingletonDesign.iml" />
     </modules>
