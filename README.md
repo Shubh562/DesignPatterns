@@ -7,35 +7,38 @@ Implementation of various design patterns
 
 import React, { useState } from 'react';
 
-// Define an interface for the selections state
-interface Selections {
-  param1: string;
-  param2: string;
-  param3: string;
-  param4: string;
+// Define TypeScript interfaces for the state
+interface ISelections {
+  application: string;
+  module: string;
+  baseBranch: string;
+  branchToCompare: string;
 }
 
-// Assuming a basic structure for the API response. Adjust this according to your actual data structure
-interface ApiResponseItem {
-  [key: string]: string | number; // This can be more specific based on your actual API response
+interface IApiResponseItem {
+  // Define your API response structure here
+  // Example:
+  id: number;
+  detail: string;
+  result: string;
 }
 
 const ComparisonTool: React.FC = () => {
   // State for storing dropdown selections
-  const [selections, setSelections] = useState<Selections>({
-    param1: '',
-    param2: '',
-    param3: '',
-    param4: '',
+  const [selections, setSelections] = useState<ISelections>({
+    application: '',
+    module: '',
+    baseBranch: '',
+    branchToCompare: '',
   });
 
   // State for storing API response data
-  const [results, setResults] = useState<ApiResponseItem[]>([]);
+  const [results, setResults] = useState<IApiResponseItem[]>([]);
 
   // Handler for dropdown change
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setSelections((prevSelections) => ({
+    setSelections(prevSelections => ({
       ...prevSelections,
       [name]: value,
     }));
@@ -45,7 +48,7 @@ const ComparisonTool: React.FC = () => {
   const fetchResults = async () => {
     try {
       const response = await fetch('/api/compare', {
-        method: 'POST', // or 'GET', depending on your API setup
+        method: 'POST', // Adjust according to your API requirements
         headers: {
           'Content-Type': 'application/json',
         },
@@ -54,7 +57,7 @@ const ComparisonTool: React.FC = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
+      const data: IApiResponseItem[] = await response.json();
       setResults(data);
     } catch (error) {
       console.error('Failed to fetch data:', error);
@@ -64,28 +67,24 @@ const ComparisonTool: React.FC = () => {
   // Render component
   return (
     <div>
-      <select name="param1" value={selections.param1} onChange={handleSelectChange}>
-        {/* Options for dropdown 1 */}
-        <option value="">Select Param1</option>
-        {/* Add your options here */}
+      <select name="application" value={selections.application} onChange={handleSelectChange}>
+        <option value="">Select Application</option>
+        {/* Populate with actual options */}
       </select>
 
-      <select name="param2" value={selections.param2} onChange={handleSelectChange}>
-        {/* Options for dropdown 2 */}
-        <option value="">Select Param2</option>
-        {/* Add your options here */}
+      <select name="module" value={selections.module} onChange={handleSelectChange}>
+        <option value="">Select Module</option>
+        {/* Populate with actual options */}
       </select>
 
-      <select name="param3" value={selections.param3} onChange={handleSelectChange}>
-        {/* Options for dropdown 3 */}
-        <option value="">Select Param3</option>
-        {/* Add your options here */}
+      <select name="baseBranch" value={selections.baseBranch} onChange={handleSelectChange}>
+        <option value="">Select Base Branch</option>
+        {/* Populate with actual options */}
       </select>
 
-      <select name="param4" value={selections.param4} onChange={handleSelectChange}>
-        {/* Options for dropdown 4 */}
-        <option value="">Select Param4</option>
-        {/* Add your options here */}
+      <select name="branchToCompare" value={selections.branchToCompare} onChange={handleSelectChange}>
+        <option value="">Select Branch to Compare</option>
+        {/* Populate with actual options */}
       </select>
 
       <button onClick={fetchResults}>Compare</button>
@@ -94,7 +93,7 @@ const ComparisonTool: React.FC = () => {
         <table>
           <thead>
             <tr>
-              {/* Assuming keys of result objects to create table headers */}
+              {/* Dynamically generate table headers based on the first result keys */}
               {Object.keys(results[0]).map((key) => (
                 <th key={key}>{key}</th>
               ))}
@@ -103,7 +102,7 @@ const ComparisonTool: React.FC = () => {
           <tbody>
             {results.map((result, index) => (
               <tr key={index}>
-                {Object.entries(result).map(([key, value], idx) => (
+                {Object.values(result).map((value, idx) => (
                   <td key={idx}>{value}</td>
                 ))}
               </tr>
