@@ -116,4 +116,3 @@ const ComparisonTool: React.FC = () => {
 };
 
 export default ComparisonTool;
-
